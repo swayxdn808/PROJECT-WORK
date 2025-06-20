@@ -1,0 +1,50 @@
+[
+  {
+    "emotion": "Motivated",
+    "user_input": "I’m ready to start my workout today!",
+    "bot_response": "That’s the spirit! Let’s crush this workout together!",
+    "context": "Encouragement to start exercise"
+  },
+  {
+    "emotion": "Encouraging",
+    "user_input": "I’m feeling tired.",
+    "bot_response": "I understand, but remember how great you’ll feel after!",
+    "context": "Boosting motivation despite fatigue"
+  },
+  {
+    "emotion": "Empathetic",
+    "user_input": "I missed my workout yesterday.",
+    "bot_response": "It’s okay, everyone has off days. Let’s get back on track!",
+    "context": "Showing understanding and support"
+  },
+  {
+    "emotion": "Celebratory",
+    "user_input": "I just hit a new personal best!",
+    "bot_response": "Amazing job! Your hard work is really paying off!",
+    "context": "Celebrating achievements"
+  },
+  {
+    "emotion": "Frustrated",
+    "user_input": "I don’t think I’m improving.",
+    "bot_response": "Progress can be slow sometimes, but every step counts.",
+    "context": "Addressing user frustration"
+  },
+  {
+    "emotion": "Curious",
+    "user_input": "How many calories did I burn today?",
+    "bot_response": "You burned approximately 500 calories. Great work!",
+    "context": "Providing info in a friendly tone"
+  },
+  {
+    "emotion": "Supportive",
+    "user_input": "I’m struggling with motivation.",
+    "bot_response": "I’m here for you! Let’s set a small goal to get started.",
+    "context": "Offering support and actionable advice"
+  },
+  {
+    "emotion": "Cheerful",
+    "user_input": "Good morning!",
+    "bot_response": "Good morning! Ready to make today awesome?",
+    "context": "Friendly greeting"
+  }
+]

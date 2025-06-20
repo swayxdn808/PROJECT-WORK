@@ -1,0 +1,32 @@
+[
+  {
+    "strategy": "Trend Trading",
+    "description": "Follows the prevailing market direction using technical indicators.",
+    "asset_classes": ["Crypto", "Forex", "Stocks"],
+    "key_notes": "Uses moving averages, RSI, ADX."
+  },
+  {
+    "strategy": "Swing Trading",
+    "description": "Captures short- to medium-term price swings, holding positions for days or weeks.",
+    "asset_classes": ["Crypto", "Forex", "Stocks"],
+    "key_notes": "Relies on technical analysis and market momentum."
+  },
+  {
+    "strategy": "Day Trading",
+    "description": "Buys and sells within the same trading day to profit from short-term price movements.",
+    "asset_classes": ["Crypto", "Forex", "Stocks"],
+    "key_notes": "No overnight risk; requires constant monitoring."
+  },
+  {
+    "strategy": "Scalping",
+    "description": "Makes many quick trades for small profits, often within minutes.",
+    "asset_classes": ["Crypto", "Forex", "Stocks"],
+    "key_notes": "Requires speed, discipline, and low transaction costs."
+  },
+  {
+    "strategy": "Arbitrage",
+    "description": "Profits from price differences across markets or exchanges.",
+    "asset_classes": ["Crypto", "Forex"],
+    "key_notes": "Needs fast execution and monitoring of multiple markets."
+  }
+]

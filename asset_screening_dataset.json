@@ -1,0 +1,37 @@
+[
+  {
+    "asset_class": "Crypto",
+    "criteria": [
+      "No riba (interest), gharar (uncertainty), or maysir (gambling)",
+      "Underlying project/use case must be halal",
+      "Transparency and utility required",
+      "Avoid speculation and illicit activities"
+    ],
+    "screening_method": "Saraf screening, Sharia board review",
+    "notes": "Some coins (e.g., Islamic Coin) are designed for compliance"
+  },
+  {
+    "asset_class": "Forex",
+    "criteria": [
+      "No interest (riba): Use Islamic (swap-free) accounts",
+      "Immediate exchange (spot trading)",
+      "Avoid excessive uncertainty and speculation",
+      "Transparent, ethical trading practices"
+    ],
+    "screening_method": "Use regulated brokers with Islamic accounts",
+    "notes": "Interest-based transactions and overnight swaps are prohibited"
+  },
+  {
+    "asset_class": "Stocks",
+    "criteria": [
+      "Business activity must be halal",
+      "Debt/Assets < 33%",
+      "Cash/Assets < 33%",
+      "Receivables/Assets < 49%",
+      "Non-compliant income < 5% of total revenue",
+      "Illiquid assets ≥ 25% of total assets"
+    ],
+    "screening_method": "Sharia-compliant stock screeners or indexes",
+    "notes": "Companies with >5% revenue from haram activities are excluded"
+  }
+]
