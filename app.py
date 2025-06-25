@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template_string
+from flask import Flask, request, jsonify, render_template_string, send_from_directory
 import tensorflow as tf
 import numpy as np
 import json
@@ -6,6 +6,9 @@ import os
 from sklearn.preprocessing import LabelEncoder
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
+from train_ai import env, agent, INITIAL_BALANCE
+import time
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -41,7 +44,7 @@ HTML = '''
 <!DOCTYPE html>
 <html>
 <head>
-    <title>AI Trading Strategy Classifier</title>
+    <title>AI Trading Profit Goal</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 40px; }
         input, button { font-size: 1.1em; }
@@ -49,24 +52,34 @@ HTML = '''
     </style>
 </head>
 <body>
-    <h2>Trading Strategy Classifier</h2>
-    <form id="form">
-        <label for="desc">Enter a strategy description:</label><br>
-        <input type="text" id="desc" name="desc" size="60" required>
-        <button type="submit">Classify</button>
+    <h2>Set Profit Goal for AI Trading</h2>
+    <form id="goalForm">
+        <label for="profit_goal">Profit Goal ($):</label>
+        <input type="number" id="profit_goal" name="profit_goal" required><br><br>
+        <label for="period">Period (trading steps):</label>
+        <input type="number" id="period" name="period" value="50" required><br><br>
+        <button type="submit">Start Trading</button>
     </form>
     <div class="result" id="result"></div>
+    <div id="gpt_summaries" style="margin-top:20px;"></div>
     <script>
-        document.getElementById('form').onsubmit = async function(e) {
+        document.getElementById('goalForm').onsubmit = async function(e) {
             e.preventDefault();
-            const desc = document.getElementById('desc').value;
-            const res = await fetch('/predict', {
+            const profit_goal = document.getElementById('profit_goal').value;
+            const period = document.getElementById('period').value;
+            document.getElementById('result').innerText = 'Running...';
+            document.getElementById('gpt_summaries').innerHTML = '';
+            const res = await fetch('/trade', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ desc })
+                body: JSON.stringify({ profit_goal, period })
             });
             const data = await res.json();
-            document.getElementById('result').innerText = 'Predicted strategy: ' + data.strategy;
+            document.getElementById('result').innerText = data.message;
+            if (data.gpt_summaries) {
+                document.getElementById('gpt_summaries').innerHTML = '<h3>GPT Advisor Summaries</h3><ul>' +
+                    data.gpt_summaries.map(s => `<li>${s}</li>`).join('') + '</ul>';
+            }
         };
     </script>
 </body>
@@ -77,14 +90,55 @@ HTML = '''
 def index():
     return render_template_string(HTML)
 
-@app.route("/predict", methods=["POST"])
-def predict():
-    desc = request.json.get('desc', '')
-    seq = tokenizer.texts_to_sequences([desc])
-    X = pad_sequences(seq, maxlen=20)
-    pred = model.predict(X)
-    label = le.inverse_transform([np.argmax(pred)])[0]
-    return jsonify({"strategy": label})
+@app.route("/trade", methods=["POST"])
+def trade():
+    req = request.get_json()
+    profit_goal = float(req.get('profit_goal', 0))
+    period = int(req.get('period', 50))
+    state = env.reset()
+    gpt_summaries = []
+    for t in range(period):
+        # Get GPT summary for this step
+        _, gpt_summary = env.gpt_advisor(
+            state, env.asset_idx, env.strategy_idx, env.pattern_entry
+        ) if hasattr(env, 'gpt_advisor') else (0, "")
+        gpt_summaries.append(f"Step {t+1}: {gpt_summary}")
+        action, asset_idx, strategy_idx = agent.act(state)
+        next_state, reward, done, _ = env.step(action, asset_idx, strategy_idx)
+        agent.remember(state, action, asset_idx, strategy_idx, reward, next_state, done)
+        state = next_state
+        if done:
+            break
+        if env.balance - INITIAL_BALANCE >= profit_goal:
+            break
+    profit = env.balance - INITIAL_BALANCE
+    message = f"Trading complete. Final balance: ${env.balance:.2f}. Profit: ${profit:.2f}. Goal: ${profit_goal:.2f}. {'Goal reached!' if profit >= profit_goal else 'Goal not reached.'}"
+    # Add GPT summaries to the response
+    return jsonify({"message": message, "gpt_summaries": gpt_summaries})
+
+@app.route('/finnhub_chart')
+def finnhub_chart():
+    symbol = request.args.get('symbol', 'AAPL')
+    FINNHUB_API_KEY = "d1de2e9r01qn1ojn1cdgd1de2e9r01qn1ojn1ce0"
+    end = int(time.mktime(datetime.now().timetuple()))
+    start = end - 60*60  # last 1 hour, 1-min bars
+    url = f"https://finnhub.io/api/v1/stock/candle"
+    params = {
+        "symbol": symbol,
+        "resolution": "1",
+        "from": start,
+        "to": end,
+        "token": FINNHUB_API_KEY
+    }
+    resp = requests.get(url, params=params)
+    closes = []
+    times = []
+    if resp.status_code == 200:
+        data = resp.json()
+        if data.get("s") == "ok":
+            closes = data["c"]
+            times = [datetime.fromtimestamp(ts).strftime('%H:%M') for ts in data["t"]]
+    return jsonify({"closes": closes, "times": times})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)

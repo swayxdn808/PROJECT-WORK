@@ -1,17 +1,8 @@
 [
   {
-    "asset_class": "Crypto",
-    "criteria": [
-      "No riba (interest), gharar (uncertainty), or maysir (gambling)",
-      "Underlying project/use case must be halal",
-      "Transparency and utility required",
-      "Avoid speculation and illicit activities"
-    ],
-    "screening_method": "Saraf screening, Sharia board review",
-    "notes": "Some coins (e.g., Islamic Coin) are designed for compliance"
-  },
-  {
     "asset_class": "Forex",
+    "finnhub_symbol": "OANDA:EUR_USD",
+    "sharia_compliant": true,
     "criteria": [
       "No interest (riba): Use Islamic (swap-free) accounts",
       "Immediate exchange (spot trading)",
@@ -23,6 +14,8 @@
   },
   {
     "asset_class": "Stocks",
+    "finnhub_symbol": "AAPL",
+    "sharia_compliant": true,
     "criteria": [
       "Business activity must be halal",
       "Debt/Assets < 33%",
@@ -33,5 +26,62 @@
     ],
     "screening_method": "Sharia-compliant stock screeners or indexes",
     "notes": "Companies with >5% revenue from haram activities are excluded"
+  },
+  {
+    "asset_class": "Forex",
+    "trade_id": "unique_identifier",
+    "compliance_checks": {
+      "riba_avoided": true,
+      "gharar_level": "low",
+      "settlement_type": "spot",
+      "leverage_ratio": "1:5",
+      "analysis_method": "technical"
+    },
+    "trading_parameters": {
+      "currency_pair": "EUR/USD",
+      "position_duration_hours": 6,
+      "volume_ratio": 0.03
+    },
+    "sharia_violations": [
+      "swap_fees",
+      "excessive_speculation"
+    ],
+    "halal_status": true
+  },
+  {
+    "asset_class": "Crypto",
+    "crypto_id": "BTC",
+    "compliance_factors": {
+      "riba_avoidance": true,
+      "gharar_level": "low|moderate|high",
+      "speculative_use": false,
+      "underlying_asset": "utility_token|store_of_value"
+    },
+    "technical_attributes": {
+      "consensus_mechanism": "PoS|PoW|dPoS",
+      "transaction_finality": "instant|delayed",
+      "interest_mechanisms": "none|staking_rewards"
+    },
+    "chart_source": "livecoinwatch",
+    "sharia_violations": ["interest_generation", "gambling_utility"],
+    "halal_status": true
+  },
+  {
+    "asset_class": "Stocks",
+    "stock_id": "unique_identifier",
+    "sector_screening": {
+      "prohibited_revenue": 0.0,
+      "permissible_sectors": ["healthcare", "technology"]
+    },
+    "financial_ratios": {
+      "debt_to_assets": 0.33,
+      "illiquid_assets": 0.75,
+      "interest_income": 0.0
+    },
+    "esg_compliance": {
+      "esg_score": 8.2,
+      "bds_aligned": true
+    },
+    "halal_status": true
   }
 ]

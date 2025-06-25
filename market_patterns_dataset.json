@@ -1,0 +1,20 @@
+[
+  {
+    "entry_id": "1",
+    "sector": "technology",
+    "timeframe": "daily",
+    "price_data": {"open": 175.20, "high": 178.90, "low": 174.80, "close": 177.40, "volume": 12000000},
+    "patterns": ["cup_and_handle"],
+    "technical_indicators": {"rsi": 41.2, "macd": 0.85, "sma_50": 173.10},
+    "outcome": {"next_period_return": 4.3, "action": "buy"}
+  },
+  {
+    "entry_id": "2",
+    "sector": "energy",
+    "timeframe": "daily",
+    "price_data": {"open": 82.10, "high": 83.50, "low": 80.30, "close": 81.90, "volume": 8500000},
+    "patterns": ["bearish_harami"],
+    "technical_indicators": {"rsi": 68.7, "bollinger_upper": 84.20, "sma_200": 79.40},
+    "outcome": {"next_period_return": -3.1, "action": "sell"}
+  }
+]

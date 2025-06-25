@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Trading Profit Goal</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        input, button { font-size: 1.1em; }
+        .result { margin-top: 20px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h2>Set Profit Goal for AI Trading</h2>
+    <form id="goalForm">
+        <label for="profit_goal">Profit Goal ($):</label>
+        <input type="number" id="profit_goal" name="profit_goal" required><br><br>
+        <label for="period">Period (trading steps):</label>
+        <input type="number" id="period" name="period" value="50" required><br><br>
+        <button type="submit">Start Trading</button>
+    </form>
+    <div class="result" id="result"></div>
+    <div id="gpt_summaries" style="margin-top:20px;"></div>
+    <script>
+        document.getElementById('goalForm').onsubmit = async function(e) {
+            e.preventDefault();
+            const profit_goal = document.getElementById('profit_goal').value;
+            const period = document.getElementById('period').value;
+            document.getElementById('result').innerText = 'Running...';
+            document.getElementById('gpt_summaries').innerHTML = '';
+            const res = await fetch('/trade', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ profit_goal, period })
+            });
+            const data = await res.json();
+            document.getElementById('result').innerText = data.message;
+            if (data.gpt_summaries) {
+                document.getElementById('gpt_summaries').innerHTML = '<h3>GPT Advisor Summaries</h3><ul>' +
+                    data.gpt_summaries.map(s => `<li>${s}</li>`).join('') + '</ul>';
+            }
+        };
+    </script>
+</body>
+</html>

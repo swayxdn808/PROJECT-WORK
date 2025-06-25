@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Real-Time Market Chart (Finnhub)</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        #chart-container { width: 90vw; max-width: 900px; margin: 0 auto; }
+    </style>
+</head>
+<body>
+    <h2>Real-Time Market Chart (Finnhub)</h2>
+    <label for="symbol">Symbol:</label>
+    <input type="text" id="symbol" value="AAPL" />
+    <button onclick="loadChart()">Load Chart</button>
+    <div id="chart-container">
+        <canvas id="marketChart"></canvas>
+    </div>
+    <script>
+    let chart;
+    async function fetchFinnhub(symbol) {
+        // This endpoint is proxied by your Flask backend for API key security
+        const res = await fetch(`/finnhub_chart?symbol=${encodeURIComponent(symbol)}`);
+        return await res.json();
+    }
+    async function loadChart() {
+        const symbol = document.getElementById('symbol').value;
+        const data = await fetchFinnhub(symbol);
+        const ctx = document.getElementById('marketChart').getContext('2d');
+        if (chart) chart.destroy();
+        chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: data.times,
+                datasets: [{
+                    label: symbol + ' Close',
+                    data: data.closes,
+                    borderColor: 'blue',
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: { display: true, title: { display: true, text: 'Time' } },
+                    y: { display: true, title: { display: true, text: 'Price' } }
+                }
+            }
+        });
+    }
+    // Auto-load on page open
+    window.onload = loadChart;
+    </script>
+</body>
+</html>
